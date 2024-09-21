@@ -1,0 +1,11 @@
+*.pyc
+*.pycache
+
+
+ckpts/
+latents/
+*.pt
+*.pkl
+*.pth
+*.npy
+*.npz

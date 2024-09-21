@@ -11,7 +11,7 @@ from tqdm import tqdm
 _url_dict = {
     'imagenet512': 'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/ref_batches/imagenet/512/VIRTUAL_imagenet512.npz',
     'imagenet256': 'https://openaipublic.blob.core.windows.net/diffusion/jul-2021/ref_batches/imagenet/256/VIRTUAL_imagenet256_labeled.npz',
-    'vae': 'https://slurm-ord.s3.amazonaws.com/ckpts/autoencoder_kl.pth',
+    'vae': 'https://hzpublic-hub.s3.us-west-2.amazonaws.com/maskdit/checkpoints/autoencoder_kl.pth',
     'maskdit256-guidance': 'https://slurm-ord.s3.amazonaws.com/ckpts/256/imagenet256-ckpt-best_with_guidance.pt',
     'maskdit256-conditional': 'https://slurm-ord.s3.amazonaws.com/ckpts/256/imagenet256-ckpt-best_without_guidance.pt',
     'maskdit256-trained': 'https://slurm-ord.s3.amazonaws.com/ckpts/256/2000000.pt',
