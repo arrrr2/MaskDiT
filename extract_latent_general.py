@@ -17,7 +17,6 @@ qualities = [10, 20, 40, 60, 80, 90]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_name', default='imagenet', type=str)
     parser.add_argument('--data_dir', default='/home/ubuntu/data/datasets/imgnet1k_comp', type=str)
     parser.add_argument('--codec', type=str)
     parser.add_argument('--quality', type=int)
@@ -50,13 +49,12 @@ def main():
     model.to(device)
 
     def extract_feature():
-        outdir = f'{args.data_name}_{args.resolution}_latent_lmdb'
         target_db_dir = os.path.join(args.outdir, args.codec, str(args.quality))
         os.makedirs(target_db_dir, exist_ok=True)
         target_env = lmdb.open(target_db_dir, map_size=pow(2,40), readahead=False)
 
         dataset_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, drop_last=False,
-                                    num_workers=8, pin_memory=True, persistent_workers=True)
+                                    num_workers=16, pin_memory=True, persistent_workers=True)
 
         idx = 0
         begin = time.time()
@@ -78,9 +76,11 @@ def main():
                     target_txn.put(f'y-{str(idx)}'.encode('utf-8'), str(lb).encode('utf-8'))
                     idx += 1
         
-            if idx % 5120 == 0:
+            if idx % 10000 == 0:
                 cur_time = time.time()
-                print(f'saved {idx} files with {cur_time - begin}s elapsed')
+                spent = cur_time - begin
+                speed = 10000 / spent
+                print(f'saved {idx} files with {spent:.4f}s elapsed. speed: {speed:.4f} imgs/sec.')
                 begin = time.time()
 
         # idx = 1_281_167
