@@ -9,3 +9,4 @@ latents/
 *.pth
 *.npy
 *.npz
+.vscode/

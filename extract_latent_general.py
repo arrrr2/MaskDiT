@@ -12,40 +12,46 @@ from torch.utils.data import DataLoader
 from autoencoder import get_model
 from train_utils.datasets import imagenet_lmdb_dataset
 
+codecs = ['avif', 'jpeg', 'webp']
+qualities = [10, 20, 40, 60, 80, 90]
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_name', default='imagenet', type=str)
-    parser.add_argument('--data_dir', default='../datasets', type=str)
+    parser.add_argument('--data_dir', default='/home/ubuntu/data/datasets/imgnet1k_comp', type=str)
+    parser.add_argument('--codec', type=str)
+    parser.add_argument('--quality', type=int)
+    parser.add_argument('--device_ids', nargs=1, type=str)
     parser.add_argument('--ckpt', default='assets/vae/autoencoder_kl.pth', type=str, help='checkpoint path')
-    parser.add_argument('--resolution', default=512, type=int)
+    parser.add_argument('--resolution', default=256, type=int)
     parser.add_argument('--batch_size', default=128, type=int)
     parser.add_argument('--split', default='train', type=str)
     parser.add_argument('--xflip', action='store_true')
-    parser.add_argument('--outdir', type=str, default='../data/imagenet512-latent', help='output directory')
+    parser.add_argument('--outdir', type=str, default='./latents/imagenet256', help='output directory')
     args = parser.parse_args()
 
+    args.device_ids = [int(i) for i in args.device_ids[0].split(',')]
     assert args.split in ['train', 'val']
 
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
     ])
-
-    dataset = imagenet_lmdb_dataset(root=f'{args.data_dir}/{args.split}', 
+ 
+    dataset = imagenet_lmdb_dataset(root=f'{os.path.join(args.data_dir, args.codec, str(args.quality))}', 
                                     transform=transform, resolution=args.resolution)
 
     print(f'data size: {len(dataset)}')
 
     model = get_model(args.ckpt)
     print(f'load vae weights from autoencoder_kl.pth')
-    model = nn.DataParallel(model)
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    model = nn.DataParallel(model, device_ids=args.device_ids)
+    device = torch.device(f"cuda:{args.device_ids[0]}") if torch.cuda.is_available() else torch.device("cpu")
     model.to(device)
 
     def extract_feature():
         outdir = f'{args.data_name}_{args.resolution}_latent_lmdb'
-        target_db_dir = os.path.join(args.outdir, outdir, args.split)
+        target_db_dir = os.path.join(args.outdir, args.codec, str(args.quality))
         os.makedirs(target_db_dir, exist_ok=True)
         target_env = lmdb.open(target_db_dir, map_size=pow(2,40), readahead=False)
 

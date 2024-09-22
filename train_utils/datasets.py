@@ -13,7 +13,7 @@ import numpy as np
 from PIL import Image
 import torch
 from torchvision.datasets import ImageFolder, VisionDataset
-
+from pillow_heif import AvifImagePlugin
 
 
 def center_crop_arr(pil_image, image_size):
@@ -77,7 +77,7 @@ def imagenet_lmdb_dataset(
         torch.save(data_set, pt_path, pickle_protocol=4)
         print('Saving pt to {}'.format(pt_path))
         print('Building lmdb to {}'.format(lmdb_path))
-        env = lmdb.open(lmdb_path, map_size=1e12)
+        env = lmdb.open(lmdb_path, map_size=int(1e12))
         with env.begin(write=True) as txn:
             for path, class_index in data_set.imgs:
                 with open(path, 'rb') as f:
