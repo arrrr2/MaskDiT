@@ -54,7 +54,7 @@ def main():
         target_env = lmdb.open(target_db_dir, map_size=pow(2,40), readahead=False)
 
         dataset_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, drop_last=False,
-                                    num_workers=16, pin_memory=True, persistent_workers=True)
+                                    num_workers=32, pin_memory=True, persistent_workers=True)
 
         idx = 0
         begin = time.time()

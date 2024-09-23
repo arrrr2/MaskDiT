@@ -10,5 +10,18 @@ output_base_dir2 = '/mnt/tmpfs/repair_imgnet1k_comp'
 num_threads = 8
 
 
-with open('broken_file_list.txt') as f:
-    
+broken_list = 'broken_file_list.txt'
+with open(broken_list, 'r') as file:
+    broken_files = file.readlines()
+
+for broken_file in broken_files:
+    # remove extention
+    broken_file = broken_file.strip()
+    broken_file = broken_file.split('/')[-1]
+    broken_file = broken_file.split('.')[0]
+    print(broken_file)
+
+    category = broken_file.split('_')[0]
+    input_file = f'{input_dir}/{category}/{broken_file}.JPEG'
+    process_and_save_image(input_file, formats, qualities, input_dir, output_base_dir2)
+    # process_and_save_image(input_file, formats, qualities, input_dir, output_base_dir)

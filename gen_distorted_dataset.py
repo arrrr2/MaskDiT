@@ -77,11 +77,13 @@ def process_image_with_progress(filepath, formats, qualities, input_dir, output_
     with lock:
         pbar.update(1)
 
-# 单一的进度条，展示整体处理进度
-print("开始处理图像...")
-pbar = tqdm(total=len(files), desc="处理进度")
-with ThreadPoolExecutor(max_workers=num_threads) as executor:
-    for filepath in files:
-        executor.submit(process_image_with_progress, filepath, formats, qualities, input_dir, output_base_dir, pbar)
-pbar.close()
-print("图像处理完成。")
+
+if __name__ == '__main__':
+    # 单一的进度条，展示整体处理进度
+    print("开始处理图像...")
+    pbar = tqdm(total=len(files), desc="处理进度")
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        for filepath in files:
+            executor.submit(process_image_with_progress, filepath, formats, qualities, input_dir, output_base_dir, pbar)
+    pbar.close()
+    print("图像处理完成。")
