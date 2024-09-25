@@ -29,8 +29,11 @@ image_size = 256
 formats = ['jpeg', 'avif', 'webp']
 qualities = [10, 20, 40, 60, 80, 90]
 input_dir = '/home/ubuntu/data/datasets/imgnet1k'
-output_base_dir = '/mnt/tmpfs/imgnet1k_comp'
-num_threads = 64  # 
+output_base_dir = '/home/ubuntu/data/datasets/imgnet1k_png'
+num_threads = 16  # 
+
+formats = ['png']
+qualities = [100]
 
 # 获取所有文件的列表
 files = []
@@ -54,6 +57,7 @@ def process_and_save_image(filepath, formats, qualities, input_dir, output_base_
                 extension_map = {
                     'jpeg': '.jpg',
                     'avif': '.avif',
+                    'png': '.png',
                     'webp': '.webp',
                 }
                 extension = extension_map[format]
@@ -69,6 +73,8 @@ def process_and_save_image(filepath, formats, qualities, input_dir, output_base_
                     pil_image.save(output_path, format='WEBP', quality=quality)
                 elif format == 'avif':
                     pil_image.save(output_path, format='AVIF', quality=quality)
+                elif format == 'png':
+                    pil_image.save(output_path, format='PNG')
     except Exception as e:
         print(f"处理文件 {filepath} 时出错: {e}")
 
