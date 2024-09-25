@@ -27,7 +27,7 @@ formats = ['png']
 qualities = [100]
 input_dir = '/home/ubuntu/data/datasets/imgnet1k'
 output_base_dir = '/mnt/tmpfs/imgnet1k_png'
-num_processes = 96
+num_processes = 192
 batch_size = 7680  # 批次大小
 
 files = []
