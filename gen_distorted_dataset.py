@@ -74,7 +74,7 @@ def process_and_save_image(filepath, formats, qualities, input_dir, output_base_
                 elif format == 'avif':
                     pil_image.save(output_path, format='AVIF', quality=quality)
                 elif format == 'png':
-                    pil_image.save(output_path, format='PNG')
+                    pil_image.save(output_path, format='PNG', compress_level=9)
     except Exception as e:
         print(f"处理文件 {filepath} 时出错: {e}")
 
