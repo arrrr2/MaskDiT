@@ -29,8 +29,8 @@ image_size = 256
 formats = ['jpeg', 'avif', 'webp']
 qualities = [10, 20, 40, 60, 80, 90]
 input_dir = '/home/ubuntu/data/datasets/imgnet1k'
-output_base_dir = '/home/ubuntu/data/datasets/imgnet1k_png'
-num_threads = 16  # 
+output_base_dir = '/mnt/tmpfs/imgnet1k_png'
+num_threads = 96  # 
 
 formats = ['png']
 qualities = [100]
